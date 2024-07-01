@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storyline Central</title>
+    <style>
+        body {
+            background-color: #f5efef;
+            background-image: url('images/play.gif');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            color: #0c0c0c;
+            padding: 20px;
+            padding-top: 60px;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .comment-section {
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: beige;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .comment {
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        .comment p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .comment-form {
+            margin-top: 5px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            max-width: 100%;
+            font-size: 0.9em;
+        }
+        .toggle-comment-form, .comment-form button[type="submit"] {
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+        .delete-form button {
+            font-size: 0.8em;
+            padding: 2px 5px;
+        }
+        .story-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .story-title {
+            font-size: 14px;
+            font-weight: normal;
+            color: white;
+        }
+        .story-actions {
+            margin-left: 20px;
+        }
+        .topnav {
+            background-color: beige;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .topnav a {
+            float: left;
+            color: brown;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topnav a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+        .topnav input[type=text] {
+            float: right;
+            padding: 6px;
+            border: none;
+            margin-top: 8px;
+            margin-right: 16px;
+            font-size: 17px;
+        }
+        @media screen and (max-width: 600px) {
+            .topnav a, .topnav input[type=text] {
+                float: none;
+                display: block;
+                text-align: left;
+                width: 100%;
+                margin: 0;
+                padding: 14px;
+            }
+            .topnav input[type=text] {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topnav">
+        <a href="#" class="active" onclick="showContent('home')">Home</a>
+        <a href="#" onclick="showContent('about')">About</a>
+        <a href="#" onclick="showContent('contact')">Contact</a>
+        <input type="text" id="searchInput" placeholder="Search.." onkeyup="searchStories()">
+    </div>
+
+    <div style="position: fixed; top: 0; left: 0; padding: 10px;">
+        <a href="https://www.audible.com/ep/2book?twobooketest=true">
+            <img src="images/bird.jpg" alt="bird" style="height: 40px; width: 100px;">
+        </a>
+    </div>
+    <h1 style="margin-left: 120px; font-size: 2em; color: brown;">
+        <a href="https://www.audible.com/ep/2book?twobooketest=true" style="text-decoration: none; color: inherit;">Stories of Strength</a>
+    </h1>
+
+    <div id="home" class="content-section">
+        <div id="storyList"></div>
+    </div>
+
+    <div id="about" class="content-section" style="display: none;">
+        <h2>About Us</h2>
+        <p>Welcome to Storyline Central, where we share inspiring stories of strength and resilience from around the world.</p>
+    </div>
+
+    <div id="contact" class="content-section" style="display: none;">
+        <h2>Contact Us</h2>
+        <p>You can reach us at contact@storylinecentral.com</p>
+    </div>
+
+    <script>
+        const ebooks = {
+            "1": `The Little Star's Journey
+            In a small village in the African savannah, there was a young boy named Kofi who loved to stargaze. Every night, he would lay on the grass and look up at the twinkling stars, dreaming of adventures beyond his village. One night, a little star fell from the sky, landing softly beside Kofi.
+            The star was scared and lost, far from its home in the sky. Kofi, determined to help, decided to embark on a journey to return the star to its place. With his trusty lantern and a heart full of courage, Kofi and the star set off on their adventure.
+            They traveled through dense forests, crossed rivers, and climbed mountains, meeting various animals who offered their help along the way. Each challenge they faced only strengthened their bond and resolve. Finally, after a long journey, they reached the highest peak where the star could return to the sky.
+            With a final hug, Kofi let go of the star, watching it rise and shine brightly among its friends. The star promised to watch over Kofi and his village, reminding him that even the smallest acts of kindness can light up the darkest nights.`,
+            "2": `The Rainbow Garden
+            In a colorful village nestled in the hills, a young girl named Amara loved to plant flowers. Her garden was her sanctuary, filled with blooms of every color. But one year, a severe drought hit the village, and Amara's garden began to wither.
+            Determined not to lose hope, Amara sought the help of the village elders, who told her of a magical spring hidden deep in the forest that could bring life back to her garden. With her watering can and a heart full of determination, Amara ventured into the forest.
+            Along the way, she met animals in need of help—a thirsty deer, a lost bird, and a tired rabbit. Amara shared her water and food with them, despite her own need to save her garden. In return, the animals guided her to the magical spring.
+            Amara filled her watering can with the spring's water and hurried back to her village. As she sprinkled the water over her garden, the flowers began to bloom again, even more vibrant than before. The villagers, inspired by Amara's kindness and perseverance, joined her in creating a community garden, ensuring that everyone would have a place to find beauty and hope.`,
+            "3": `The Tale of the Brave Little Kite
+            In a bustling seaside town, a young boy named Aiko loved to fly kites. His favorite was a colorful dragon kite that soared high above the beach. One windy day, Aiko’s kite flew so high that it got tangled in a tall tree on a nearby island.
+            Determined to rescue his kite, Aiko built a small raft and set sail to the island. The journey was tough, with strong waves and winds challenging his every move. But Aiko’s love for his kite kept him going.
+            Upon reaching the island, Aiko faced another challenge—the tree was guarded by a family of mischievous monkeys. Instead of shooing them away, Aiko shared his snacks with the monkeys and played with them. Grateful for his kindness, the monkeys helped Aiko retrieve his kite.
+            With his kite back in hand, Aiko returned to the town, greeted by cheers from the villagers. His bravery and kindness had not only saved his kite but also taught everyone the importance of compassion and determination. From that day on, Aiko’s dragon kite became a symbol of hope, flying high above the beach, reminding everyone of the power of kindness and courage.`,
+            "4": `From Home to Hope
+            The sun rose over Gaza, casting its golden rays on the shattered remains of Shuja'iyya. Youssef, twelve years old, watched as his family prepared to leave their home for the last time. Their once vibrant neighborhood was now a landscape of ruins, with the echoes of laughter replaced by the distant sounds of conflict.
+            Youssef’s father, Ahmed, packed what little they could salvage into a few bags. His mother, Fatima, held his younger sister, Leila, close, trying to mask her fear with a brave smile. “We need to move quickly,” Ahmed urged, his voice filled with urgency.
+            As they made their way through the rubble-strewn streets, Youssef felt a mixture of sadness and hope stirring within him. They were leaving behind everything they had ever known, yet he clung to the belief that a better future awaited them.
+            Along the journey, they encountered others like them—families with haunted eyes and stories of loss etched into their weary faces. They shared what little they had, offering comfort and solidarity in a time of uncertainty. Each step brought them closer to the border, where a temporary refuge awaited them.
+            As they crossed into the unknown, Youssef looked back at Gaza, a place that would forever be a part of him. In his heart, he carried not just memories of home but also a flicker of hope—a beacon guiding them towards a future where peace and dignity could flourish once more.`,
+            "5": `A New Dawn in Aleppo
+            In the heart of Aleppo, where ancient history meets modern chaos, Layla tended to her family's rooftop garden. Amidst the crumbling buildings and echoing gunfire, her garden stood as a testament to resilience and hope.
+            Layla's father, Jamal, had taught her the art of gardening—a tradition passed down through generations. Together, they nurtured the soil and planted seeds of peace amidst the turmoil. The garden became a sanctuary, a place where neighbors gathered to find solace and strength.
+            One fateful night, as bombs fell around them, Layla refused to abandon her garden. With trembling hands and a heart full of courage, she watered the fragile shoots and tended to the wounded earth. Her determination inspired others to join her, planting gardens in the midst of destruction.
+            Despite the darkness that engulfed Aleppo, Layla's garden bloomed with life—a symbol of resilience in the face of adversity. It became a beacon of hope for a city torn apart by war, reminding its people that even in the darkest of times, new beginnings were possible.`,
+            "6": `Whispers of Change
+            In the quiet town of Oakwood, whispers of change began to stir. For years, the town had been divided by fear and prejudice, its residents wary of those who were different. But beneath the surface, a new generation was rising—a generation determined to bridge the divide and create a community built on acceptance and understanding.
+            Emma, a young artist with a passion for storytelling, decided to use her talents to spark conversations about unity and empathy. She painted murals depicting scenes of diversity and harmony, each brushstroke a testament to the beauty of difference.
+            Her murals caught the attention of Samir, a local teacher who believed in the power of education to change hearts and minds. Together, they launched an initiative to teach children about empathy and cultural diversity, inviting guest speakers from different backgrounds to share their stories.
+            As the town embraced these efforts, walls began to crumble, and hearts began to open. Neighbors who once viewed each other with suspicion now shared meals and laughter, celebrating their shared humanity. Oakwood became a place where diversity was not just tolerated but celebrated—a shining example of the transformative power of empathy.`,
+            "7": `The Lantern of Hope
+            In the heart of a bustling city, where skyscrapers towered over crowded streets, a young girl named Mei carried a lantern of hope. Mei's parents ran a small noodle shop, their faces etched with lines of hard work and determination.
+            One stormy night, as rain pounded against the pavement, Mei found an abandoned lantern by the riverbank. Its glass panes were cracked, and its flame flickered weakly in the wind. Despite its imperfections, Mei felt a spark of hope stir within her.
+            She brought the lantern home and placed it in the window of her family's noodle shop. The soft glow illuminated the darkened street, drawing weary travelers and hungry souls seeking warmth and comfort. Mei's parents welcomed them with open arms, serving steaming bowls of noodles and kind words of encouragement.
+            Word of Mei's lantern spread throughout the city, attracting people from all walks of life. Some came for the food, others for the warmth of community, but all left with a renewed sense of hope. The lantern became a symbol of resilience and compassion—a beacon of light in the midst of life's storms.`,
+            "8": `Echoes of Sakura
+            In the quiet town of Matsuyama, where cherry blossoms bloomed in abundance, a young boy named Hiroki dreamed of capturing the fleeting beauty of sakura season. Armed with his grandfather's old camera, Hiroki spent hours wandering the streets, searching for the perfect moment to press the shutter.
+            One spring morning, as petals danced on the gentle breeze, Hiroki discovered an ancient sakura tree hidden in a forgotten corner of the town. Its branches stretched towards the sky, adorned with blossoms that shimmered like delicate silk.
+            Determined to share the tree's beauty with others, Hiroki embarked on a mission to capture its essence through photography. He set up his tripod at dawn and waited patiently for the soft light of sunrise to bathe the tree in golden hues.
+            As Hiroki's photographs began to circulate, they touched the hearts of people around the world. Each image captured not just the beauty of sakura but also the spirit of perseverance and renewal. The ancient tree became a symbol of hope, reminding everyone that even in fleeting moments, there existed timeless beauty and strength.`,
+        };
+
+        const summaries = {
+            "1": "A young boy named Kofi embarks on an adventure to return a fallen star to the sky, learning about courage and kindness along the way.",
+    "2": "Amara, a young girl, saves her withering garden during a drought by seeking a magical spring, and in the process, creates a community garden with her village.",
+    "3": "Aiko, a boy who loves flying kites, rescues his favorite kite from an island with the help of some monkeys, teaching his village about compassion and determination.",
+    "4": "Youssef's family flees their war-torn home in Gaza, finding hope and resilience in a refugee camp as they dream of returning and rebuilding.",
+    "5": "Noor's family navigates the perils of war in Aleppo, finding strength in their unity and hope for a brighter future amidst the ruins.",
+    "6": "Fatima, a university student in Khartoum, joins the protests for freedom, witnessing the fall of a dictator and the dawn of a new democratic era in Sudan.",
+    "7": "Zainab's family finds hope in a lantern as they navigate the challenges of war and displacement, inspiring their community with resilience and kindness.",
+    "8": "Hana, a girl from a Japanese village, helps replant cherry blossom trees after a storm, restoring the beauty of her village and spreading a message of hope and unity.",
+            // ... Add the rest of the summaries here
+        };
+        
+
+        let comments = {
+            "1": [],
+            "2": [],
+            // ... Initialize empty comment arrays for each story
+        };
+
+        function createStoryList() {
+            const storyList = document.getElementById('storyList');
+            for (const [id, title] of Object.entries(ebooks)) {
+                const storyTitle = title.split('\n')[0];
+                const storyHtml = `
+                    <div class="story-container" id="story-container${id}">
+                        <a href="#" onclick="downloadStory('${id}');" style="margin-right: 10px;">
+                            <img src="images/my.jpg" alt="eBook" style="height: 60px; width: 60px;">
+                        </a>
+                        <span class="story-title">${storyTitle}</span>
+                    </div>
+                    <div id="story-content${id}" class="story-content hidden-content">
+                        <p style="color: white;">${title}</p>
+                    </div>
+                    <audio id="audio-story1" controls>
+    <source id="audio-source1" src="" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+                    <button onclick="playAudio('${id}')" style="background-color: blue; color: white;">LISTEN</button>
+                    <div style="margin-top: 10px;">
+                        <a href="#" onclick="shareOnFacebook('${id}');"><img src="images/face.jpg" alt="Share on Facebook" style="height: 30px; width: 30px;"></a>
+                        <a href="#" onclick="shareOnTwitter('${id}');"><img src="images/twitter.jpg" alt="Share on Twitter" style="height: 30px; width: 30px;"></a>
+                    </div>
+                    <div class="comment-section" id="comment-section${id}">
+                        <div id="comments${id}"></div>
+                        <form class="comment-form" onsubmit="return addComment('${id}')">
+                            <textarea id="comment-input${id}" rows="2"></textarea>
+                            <br>
+                            <button type="submit" style="background-color: brown; color: white;">WRITE REVIEW</button>
+                        </form>
+                    </div>
+                `;
+                storyList.innerHTML += storyHtml;
+            }
+            updateComments();
+        }
+
+        function searchStories() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            const stories = document.getElementsByClassName('story-container');
+            
+            for (let i = 0; i < stories.length; i++) {
+                const title = stories[i].getElementsByClassName('story-title')[0].innerText.toLowerCase();
+                const contentId = 'story-content' + stories[i].id.replace('story-container', '');
+                const content = document.getElementById(contentId);
+                
+                if (input === "") {
+                    stories[i].style.display = '';
+                    content.style.display = 'none';
+                } else {
+                    if (title.includes(input)) {
+                        stories[i].style.display = '';
+                        content.style.display = 'block';
+                    } else {
+                        stories[i].style.display = 'none';
+                        content.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function toggleText(summaryId) {
+            const summary = document.getElementById(summaryId);
+            summary.style.display = summary.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function playAudio(id) {
+    var audioPath = "C:/Users/salwa/OneDrive/Documents/salwa/final assigment ebook/audio/";
+
+    // Example filename (replace with your actual filename):
+    var audioFile = "audio_file_for_story_" + id + ".mp3";
+
+    var audioElement = document.getElementById("audio-story" + id);
+    var sourceElement = document.getElementById("audio-source" + id);
+
+    // Set the source of the audio element
+    sourceElement.src = audioPath + audioFile;
+
+    // Load and play the audio
+    audioElement.load();
+    audioElement.play();
+}
+
+
+    
+
+
+
+        function shareOnFacebook(storyId) {
+            const storySummary = document.getElementById('summary' + storyId).innerText;
+            const url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href) + '&quote=' + encodeURIComponent(storySummary);
+            window.open(url, '_blank');
+        }
+
+        function shareOnTwitter(storyId) {
+            const storySummary = document.getElementById('summary' + storyId).innerText;
+            const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(storySummary) + '&url=' + encodeURIComponent(window.location.href);
+            window.open(url, '_blank');
+        }
+
+        function showContent(contentId) {
+            var contentSections = document.getElementsByClassName('content-section');
+            for (var i = 0; i < contentSections.length; i++) {
+                contentSections[i].style.display = 'none';
+            }
+            
+            document.getElementById(contentId).style.display = 'block';
+            
+            var navLinks = document.getElementsByClassName('topnav')[0].getElementsByTagName('a');
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].classList.remove('active');
+                if (navLinks[i].getAttribute('onclick').includes(contentId)) {
+                    navLinks[i].classList.add('active');
+                }
+            }
+        }
+
+        function downloadStory(storyId) {
+    const storyTitle = "From_Home_to_Hope"; // Adjust the title format if needed
+    const filePath = `file:///C:/Users/salwa/OneDrive/Documents/salwa/final%20assigment%20ebook/${storyTitle}.pdf`;
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', `${storyTitle}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert(`Downloading story "${storyTitle}"`);
+}
+
+
+
+
+
+
+        function addComment(storyId) {
+            const commentInput = document.getElementById(`comment-input${storyId}`);
+            const comment = commentInput.value.trim();
+            if (comment) {
+                comments[storyId].push(comment);
+                commentInput.value = '';
+                updateComments();
+            }
+            return false;
+        }
+
+        function deleteComment(storyId, commentIndex) {
+            comments[storyId].splice(commentIndex, 1);
+            updateComments();
+        }
+
+        function updateComments() {
+            for (const [storyId, storyComments] of Object.entries(comments)) {
+                const commentSection = document.getElementById(`comments${storyId}`);
+                commentSection.innerHTML = storyComments.map((comment, index) => `
+                    <div class="comment">
+                        <p>${comment}</p>
+                        <button onclick="deleteComment('${storyId}', ${index})" style="background-color: red; color: white;">Delete</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        createStoryList();
+    </script>
+</body>
+</html>
